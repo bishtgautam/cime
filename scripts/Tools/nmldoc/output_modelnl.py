@@ -2,8 +2,9 @@
 
 """Utilities to generate an html web page of model namelists
 """
+import os
 
-def print_header(showinfo_dir):
+def print_header(nmldoc_dir):
 
     print '''
 
@@ -16,7 +17,7 @@ def print_header(showinfo_dir):
     <link rel="stylesheet" type="text/css" href="/models/cesm1.0/cam/docs/namelist/nl_style_sheet.css" />
     '''
 
-    print "<script src=%s/showinfo.js> </script>" %showinfo_dir
+    print "<script src=%s/showinfo.js> </script>" %nmldoc_dir
 
     print '''
     </head>
@@ -81,9 +82,11 @@ def print_start_table(category, hdr):
     <th width="80%">Namelist Variable</th>
     '''
 
-def print_row(name, doc, group, image_dir):
+def print_row(name, doc, group, nmldoc_dir):
 
-    print "<tr id= \"%s_tr\">" %name
+    image_dir = os.path.join(nmldoc_dir,"images")
+
+    print "<tr id=\"%s_tr\">" %name
     print "<td><a name=\"%s_%s\"></a>" %(name,group)
     print "<img id=\"%s_arrow\" src=\"%s/arrow_right.gif\">" %(name, image_dir)
     print "<code class=\"varname\">"
