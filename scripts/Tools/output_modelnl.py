@@ -79,7 +79,6 @@ def print_start_table(category, hdr):
     print "<table id=\"%s_table\" border=\"1\" width=\"100%%\" cellpadding=\"2\" cellspacing=\"0\">" %(category)
     print '''
     <th width="80%">Namelist Variable</th>
-    <th width="20%">Group</th>
     '''
 
 def print_row(name, doc, group, image_dir):
@@ -88,13 +87,12 @@ def print_row(name, doc, group, image_dir):
     print "<td><a name=\"%s_%s\"></a>" %(name,group)
     print "<img id=\"%s_arrow\" src=\"%s/arrow_right.gif\">" %(name, image_dir)
     print "<code class=\"varname\">"
-    print "<a href=\"javascript:void(0)\" onclick=\"toggleHelp('%s_%s')\">%s</a> " %(name,group,name)
+    print "<a href=\"javascript:void(0)\" onclick=\"toggleHelp('%s_%s')\">%s</a> " %(name, group, name)
     print "</code>"
     print "<div id=\"%s_%s_help\" style=\"display: none; padding-left: 16px; margin-top: 4px; border-top: 1px dashed  #cccccc;\">" %(name, group)
     print "<pre>%s</pre>" %(doc)
     print "</div>"
     print "</td>"
-    print "<td>%s</td>" %(group)
     print "</tr>"
 
 def print_end_table():
