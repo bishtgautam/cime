@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+
+    <style type="text/css">
+body {
+     font-family:'Open Sans', Arial, sans-serif;
+     font-size:14px;
+     font-weight:300;
+     line-height:1.6em;
+     color:#656565;
+}
+
+#wrapper{
+	width:90%;
+	margin:0;	
+	padding:0;
+}
+
+.clickable-heading {
+    cursor:pointer;
+}
+.clickable-heading:hover {
+    color:#515151;
+}
+    </style>
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+function toggleDocs(event) {
+
+    if (event.target && event.target.className == 'clickable-heading') {
+
+        var next = event.target.nextElementSibling;
+
+
+        if (next.style.display == "none") {
+            next.style.display = "block";
+
+        } else {
+            next.style.display = "none";
+        }
+    }
+}
+
+document.addEventListener('click', toggleDocs, true);
+}//]]> 
+
+</script>
+
+  </head>
+  <body>
+     <div id="wrapper">
+        <h1>Component Model Namelist Definitions for <b>{{ comp }}</b></h1>
+	<p>
+	  CESM Version: {{ cesm_version }}<br>
+	  HTML created on: {{ today }}
+	</p>
+  	<p>
+	This page contains the complete list of <b>{{ comp }}</b> namelist variables available.<br/>
+	They are grouped by categories designed to aid browsing.  <br/>
+	Clicking on the name of a variable will display additional descriptive information.<br/>  
+	Use the cntl+F key to search for specific strings in this file.
+	</p>
+
+	<h3>Category name 1 here</h3>
+
+	<h4 class="clickable-heading">Variable name here - short desc goes here...</h4>
+	  <dl style="display:none"> 
+	    <dt>Description</dt>
+	    <dd>desc</dt>
+	    
+	    <dt>Type</dt>
+	    <dd>entry_type</dt>
+	    
+	    <dt>Valid Values</dt>
+	    <dd>valid_values</dt>
+	    
+	    <dt>Default Value</dt>
+	    <dd>value</dt>
+
+	    <dt>XML Group Name</dt>
+	    <dd>group_name</dt>
+
+	  </dl>
+
+
+	<h3>Category name 2 here</h3>
+	<h4 class="clickable-heading">Variable name here - short desc goes here...</h4>
+	  <dl style="display:none"> 
+	    <dt>Description</dt>
+	    <dd>desc</dt>
+
+	    <dt>Type</dt>
+	    <dd>entry_type</dt>
+
+	    <dt>Valid Values</dt>
+	    <dd>valid_values</dt>
+
+	    <dt>Default Value</dt>
+	    <dd>value</dt>
+
+	    <dt>XML Group Name</dt>
+	    <dd>group_name</dt>
+
+	  </dl>
+	</div>
+
+     </div>
+
+
+  </body>
+</html>

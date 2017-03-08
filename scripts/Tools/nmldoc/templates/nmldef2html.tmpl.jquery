@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <style>
+    /* adding embedded styles for simple-expander.js jquery plugin */
+
+body {
+     font-family:'Open Sans', Arial, sans-serif;
+     font-size:14px;
+     font-weight:300;
+     line-height:1.6em;
+     color:#656565;
+}
+
+.content {
+	 background: #ffffff;
+	 margin: 0 0 15px;
+	 padding: 20px;
+	 overflow: hidden;
+}
+
+.content a {
+	 color: #217acf;
+}
+
+#wrapper{
+	width:90%;
+	margin:0;	
+	padding:0;
+}
+
+.category-frame {
+    background-color: #ffffff;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 5px 20px 5px 20px;
+    margin: 5px;
+    width: 90%;
+    border: 1px dotted #aeaeae;
+}
+
+#category {
+    padding-left: 5px;
+}
+
+#category .expander.expanded {
+    padding-left: 13px;
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+#category .expander.collapsed {
+    padding-left: 13px;
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+    </style>
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js" language="javascript" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript" scr="http://www.cesm.ucar.edu/scripts/simple-expand.js"></script>
+
+    <script type="text/javascript">
+      $(function () {
+        $('.expander').simpleexpand();
+        // prettyPrint();
+      });
+    </script>
+
+  </head>
+  <body>
+     <div id="wrapper">
+        <h1>Component Model Namelist Definitions for <b>{{ comp }}</b></h1>
+	<p>CESM Version: {{ cesm_version }}<br>
+	   HTML created on: {{ today }}
+	</p>
+  	<p>
+	This page contains the complete list of <b>{{ comp }}</b> namelist variables available.<br/>
+	They are grouped by categories designed to aid browsing.  <br/>
+	Clicking on the name of a variable will display additional descriptive information.<br/>  
+	Use the cntl+F key to search for specific strings in this file.
+	</p>
+	
+	<p><a class="expander" data-expander-target=".category-frame .content" 
+	      data-expander-target-search="absolute" href="#">Show/Hide All</a></p>	
+
+	<h3>Category name 1 here</h3>
+
+	<div class="category-frame">
+	  <div id="category">
+	     <b>Variable name here</b> <a class="expander" href="#">short desc goes here...</a>
+	     <div class="content" style="display: none;">
+	       <dl> 
+	         <dt>Description</dt>
+	         <dd>desc</dt>
+
+	         <dt>Type</dt>
+	         <dd>entry_type</dt>
+
+	         <dt>Valid Values</dt>
+	         <dd>valid_values</dt>
+
+	         <dt>Default Value</dt>
+	         <dd>value</dt>
+
+	         <dt>XML Group Name</dt>
+	         <dd>group_name</dt>
+
+	       </dl>
+	     </div>
+	  </div>
+	</div>
+
+	<h3>Category name 2  here</h3>
+	<div class="category-frame">
+	  <div id="category">
+	     <b>Variable name here</b> <a class="expander" href="#">short desc goes here...</a>
+	     <div class="content" style="display: none;">
+	       <dl>
+	         <dt>Description</dt>
+	         <dd>desc</dt>
+
+	         <dt>Type</dt>
+	         <dd>entry_type</dt>
+
+	         <dt>Valid Values</dt>
+	         <dd>valid_values</dt>
+
+	         <dt>Default Value</dt>
+	         <dd>value</dt>
+
+	         <dt>XML Group Name</dt>
+	         <dd>group_name</dt>
+
+	       </dl>
+	    </div>
+	  </div>
+	</div>
+	
+     </div>
+  </body>
+</html>

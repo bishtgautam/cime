@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+
+    <script type="text/javascript">
+      window.onload=function(){
+      var toggle = (function () {
+      var visible = false,
+          ele = document.getElementById('test'),
+          btn = document.querySelector('.btn');
+  
+      function flip () {
+          var display = ele.style.display;
+          ele.style.display = (display === 'block' ? 'none' : 'block');
+          visible = !visible;
+      }
+  
+      btn.addEventListener('click', flip);
+  
+      ele.addEventListener('click', function (e) {
+         e.stopPropagation();
+      });
+  
+      document.addEventListener('click', function (e) {
+      if (visible && e.target !== btn) flip();
+      });
+  
+      ele.style.display = 'none';
+  
+      return flip;
+      }());
+      }
+    </script>
+
+    <style>
+body {
+     font-family:'Open Sans', Arial, sans-serif;
+     font-size:14px;
+     font-weight:300;
+     line-height:1.6em;
+     color:#656565;
+}
+
+.btn {
+  width: 180px;
+}
+
+#test-frame {
+    background-color: #ffffff;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 5px 20px 5px 20px;
+    margin: 5px;
+    width: 90%;
+    border: 1px dotted #aeaeae;
+    display: none;
+}
+
+#test {
+  margin: 10px 0;
+  padding: 20px;
+  display: none;
+  box-sizing: border-box;
+  width: 180px;
+  height: 180px;
+  
+  background-color: #eee;
+  border: 2px solid #333;
+  line-height: 96px;
+  text-align: center;
+  color: #333;
+}
+
+.content {
+	 background: #ffffff;
+	 margin: 0 0 15px;
+	 padding: 20px;
+	 overflow: hidden;
+}
+
+.content a {
+	 color: #217acf;
+}
+
+#wrapper{
+	width:90%;
+	margin:0;	
+	padding:0;
+}
+    </style>
+
+  </head>
+  <body>
+     <div id="wrapper">
+        <h1>Component Model Namelist Definitions for <b>{{ comp }}</b></h1>
+	<p>
+	  CESM Version: {{ cesm_version }}<br>
+	  HTML created on: {{ today }}
+	</p>
+  	<p>
+	This page contains the complete list of <b>{{ comp }}</b> namelist variables available.<br/>
+	They are grouped by categories designed to aid browsing.  <br/>
+	Clicking on the name of a variable will display additional descriptive information.<br/>  
+	Use the cntl+F key to search for specific strings in this file.
+	</p>
+
+	<h3>Category name 1 here</h3>
+
+	<button class="btn">Variable name here - short desc goes here...</button>
+	<div id="test">
+	  <dl> 
+	    <dt>Description</dt>
+	    <dd>desc</dt>
+	    
+	    <dt>Type</dt>
+	    <dd>entry_type</dt>
+	    
+	    <dt>Valid Values</dt>
+	    <dd>valid_values</dt>
+	    
+	    <dt>Default Value</dt>
+	    <dd>value</dt>
+
+	    <dt>XML Group Name</dt>
+	    <dd>group_name</dt>
+
+	  </dl>
+	</div>
+
+	<h3>Category name 2  here</h3>
+	<div class="category-frame">
+	  <div id="category">
+	     <b>Variable name here</b> <a class="expander" href="#">short desc goes here...</a>
+	     <div class="content" style="display: none;">
+	       <dl>
+	         <dt>Description</dt>
+	         <dd>desc</dt>
+
+	         <dt>Type</dt>
+	         <dd>entry_type</dt>
+
+	         <dt>Valid Values</dt>
+	         <dd>valid_values</dt>
+
+	         <dt>Default Value</dt>
+	         <dd>value</dt>
+
+	         <dt>XML Group Name</dt>
+	         <dd>group_name</dt>
+
+	       </dl>
+	    </div>
+	  </div>
+	</div>
+	
+     </div>
+  </body>
+</html>
