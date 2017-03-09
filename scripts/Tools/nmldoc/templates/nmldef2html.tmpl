@@ -106,54 +106,33 @@
 	<button onclick="showAll();">Show Details</button>
 	<button onclick="hideAll();">Hide Details</button>
 
-
-	<h2>Category name 1 here</h2>
+	{% for category, var_list in html_dict.iteritems() %}
+	<h2>{{ category|e }}</h2>
+	{% for var in var_list %}
 	<div class="accordionItem">
-	<h2>Variable name here - short desc goes here...</h2>
-	<div>
-	  <dl>
-	    <dt>Description</dt>
-	    <dd>desc</dd>
+	  <h2>{{ var['name'] }} - {{ var['short_desc']|e }}</h2>
+	  <div>
+	    <dl>
+	      <dt>Description</dt>
+	      <dd>{{ var['desc']|e }}</dd>
 	    
-	    <dt>Type</dt>
-	    <dd>entry_type</dd>
+	      <dt>Type</dt>
+	      <dd>{{ var['entry_type'] }}</dd>
 	    
-	    <dt>Valid Values</dt>
-	    <dd>valid_values</dd>
+	      <dt>Valid Values</dt>
+	      <dd>{{ var['valid_values']|e }}</dd>
 	    
-	    <dt>Default Value</dt>
-	    <dd>value</dd>
+	      <dt>Default Value</dt>
+	      <dd>{{ var['value']|e }}</dd>
 
-	    <dt>XML Group Name</dt>
-	    <dd>group_name</dd>
+	      <dt>XML Group Name</dt>
+	      <dd>{{ var['group_name'] }}</dd>
 
-	  </dl>
+	    </dl>
+	  </div>
 	</div>
-	</div>
-
-	<h2>Category name 2 here</h2>
-	<div class="accordionItem">
-	<h2>Variable name 2 here - short desc goes here...</h2>
-	<div>
-	  <dl>
-	    <dt>Description</dt>
-	    <dd>desc</dd>
-
-	    <dt>Type</dt>
-	    <dd>entry_type</dd>
-
-	    <dt>Valid Values</dt>
-	    <dd>valid_values</dd>
-
-	    <dt>Default Value</dt>
-	    <dd>value</dd>
-
-	    <dt>XML Group Name</dt>
-	    <dd>group_name</dd>
-
-	  </dl>
-	</div>
-	</div>
+	{% endfor %}
+	{% endfor %}
 
   </body>
 </html>

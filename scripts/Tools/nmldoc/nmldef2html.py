@@ -114,9 +114,12 @@ def _main_func(options, nmldoc_dir):
                     name = re.sub('@.+$', "", name)
 
                 # Create the information for this node - start with the description
-                desc = definition.get_element_text("desc", root=node)
-                if desc is not None: 
+                raw_desc = definition.get_element_text("desc", root=node)
+                if raw_desc is not None: 
+                    desc = ' '.join(raw_desc.split())
                     short_desc = desc[:75] + (desc[75:] and '...')
+                else:
+                    desc = ''
 
                 # add type
                 entry_type = definition.get_element_text("type", root=node)
@@ -139,7 +142,7 @@ def _main_func(options, nmldoc_dir):
                 # create the node dictionary
                 node_dict = { 'name'        : name,
                               'desc'        : desc,
-                              'short_decs'  : short_desc,
+                              'short_desc'  : short_desc,
                               'entry_type'  : entry_type,
                               'valid_values': valid_values,
                               'value'       : value,
