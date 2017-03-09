@@ -1,57 +1,96 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
 
+
     <style type="text/css">
-body {
-     font-family:'Open Sans', Arial, sans-serif;
-     font-size:14px;
-     font-weight:300;
-     line-height:1.6em;
-     color:#656565;
-}
+      body {
+      font-family:'Open Sans', Arial, sans-serif;
+      font-size:14px;
+      font-weight:300;
+      line-height:1.6em;
+      color:#656565;
+      }
 
-#wrapper{
-	width:90%;
-	margin:0;	
-	padding:0;
-}
-
-.clickable-heading {
-    cursor:pointer;
-}
-.clickable-heading:hover {
-    color:#515151;
-}
+      .accordionItem h2 { margin: 0; font-size: 1.1em; padding: 0.4em; color: #fff; background-color: #944; border-bottom: 1px solid #66d; }
+      .accordionItem h2:hover { cursor: pointer; }
+      .accordionItem div { margin: 0; padding: 1em 0.4em; background-color: #eef; border-bottom: 1px solid #66d; }
+      .accordionItem.hide h2 { color: #000; background-color: #88f; }
     </style>
 
-<script type='text/javascript'>//<![CDATA[
-window.onload=function(){
-function toggleDocs(event) {
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
-    if (event.target && event.target.className == 'clickable-heading') {
+    <script type="text/javascript">
+    //<![CDATA[
 
-        var next = event.target.nextElementSibling;
+    var accordionItems = new Array();
 
+    function init() {
 
-        if (next.style.display == "none") {
-            next.style.display = "block";
+      // Grab the accordion items from the page
+      var divs = document.getElementsByTagName( 'div' );
+      for ( var i = 0; i < divs.length; i++ ) {
+        if ( divs[i].className == 'accordionItem' ) accordionItems.push( divs[i] );
+      }
 
-        } else {
-            next.style.display = "none";
-        }
+      // Assign onclick events to the accordion item headings
+      for ( var i = 0; i < accordionItems.length; i++ ) {
+        var h2 = getFirstChildWithTagName( accordionItems[i], 'H2' );
+        h2.onclick = toggleItem;
+      }
+
+      // Hide all accordion item bodies 
+      for ( var i = 0; i < accordionItems.length; i++ ) {
+        accordionItems[i].className = 'accordionItem hide';
+        $(accordionItems[i]).find('div').slideUp();
+      }
     }
-}
 
-document.addEventListener('click', toggleDocs, true);
-}//]]> 
+    function toggleItem() {
+      var itemClass = this.parentNode.className;
 
-</script>
+      // Hide all items
+      for ( var i = 0; i < accordionItems.length; i++ ) {
+        accordionItems[i].className = 'accordionItem hide';
+        $(accordionItems[i]).find('div').slideUp();
+      }
+
+      // Show this item if it was previously hidden
+      if ( itemClass == 'accordionItem hide' ) {
+        this.parentNode.className = 'accordionItem';
+        $(this).parent().find('div').slideDown();
+      }
+    }
+
+    function getFirstChildWithTagName( element, tagName ) {
+      for ( var i = 0; i < element.childNodes.length; i++ ) {
+        if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+      }
+    }
+
+    function hideAll() {
+      // Hide all accordian items
+      for ( var i = 0; i < accordionItems.length; i++ ) {
+        accordionItems[i].className = 'accordionItem hide';
+        $(accordionItems[i]).find('div').slideUp();
+      }
+    }
+
+    function showAll() {
+      // show all accordian items
+      for ( var i = 0; i < accordionItems.length; i++ ) {
+        accordionItems[i].className = 'accordionItem hide';
+        $(accordionItems[i]).find('div').slideDown();
+      }
+    }
+
+     //]]>
+    </script>
 
   </head>
-  <body>
-     <div id="wrapper">
+  <body onload="init()">
+
         <h1>Component Model Namelist Definitions for <b>{{ comp }}</b></h1>
 	<p>
 	  CESM Version: {{ cesm_version }}<br>
@@ -64,51 +103,57 @@ document.addEventListener('click', toggleDocs, true);
 	Use the cntl+F key to search for specific strings in this file.
 	</p>
 
-	<h3>Category name 1 here</h3>
+	<button onclick="showAll();">Show Details</button>
+	<button onclick="hideAll();">Hide Details</button>
 
-	<h4 class="clickable-heading">Variable name here - short desc goes here...</h4>
-	  <dl style="display:none"> 
+
+	<h2>Category name 1 here</h2>
+	<div class="accordionItem">
+	<h2>Variable name here - short desc goes here...</h2>
+	<div>
+	  <dl>
 	    <dt>Description</dt>
-	    <dd>desc</dt>
+	    <dd>desc</dd>
 	    
 	    <dt>Type</dt>
-	    <dd>entry_type</dt>
+	    <dd>entry_type</dd>
 	    
 	    <dt>Valid Values</dt>
-	    <dd>valid_values</dt>
+	    <dd>valid_values</dd>
 	    
 	    <dt>Default Value</dt>
-	    <dd>value</dt>
+	    <dd>value</dd>
 
 	    <dt>XML Group Name</dt>
-	    <dd>group_name</dt>
-
-	  </dl>
-
-
-	<h3>Category name 2 here</h3>
-	<h4 class="clickable-heading">Variable name here - short desc goes here...</h4>
-	  <dl style="display:none"> 
-	    <dt>Description</dt>
-	    <dd>desc</dt>
-
-	    <dt>Type</dt>
-	    <dd>entry_type</dt>
-
-	    <dt>Valid Values</dt>
-	    <dd>valid_values</dt>
-
-	    <dt>Default Value</dt>
-	    <dd>value</dt>
-
-	    <dt>XML Group Name</dt>
-	    <dd>group_name</dt>
+	    <dd>group_name</dd>
 
 	  </dl>
 	</div>
+	</div>
 
-     </div>
+	<h2>Category name 2 here</h2>
+	<div class="accordionItem">
+	<h2>Variable name 2 here - short desc goes here...</h2>
+	<div>
+	  <dl>
+	    <dt>Description</dt>
+	    <dd>desc</dd>
 
+	    <dt>Type</dt>
+	    <dd>entry_type</dd>
+
+	    <dt>Valid Values</dt>
+	    <dd>valid_values</dd>
+
+	    <dt>Default Value</dt>
+	    <dd>value</dd>
+
+	    <dt>XML Group Name</dt>
+	    <dd>group_name</dd>
+
+	  </dl>
+	</div>
+	</div>
 
   </body>
 </html>
