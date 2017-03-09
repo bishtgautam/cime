@@ -30,7 +30,8 @@ except:
 
 # global variables
 _now = datetime.datetime.now().strftime('%Y-%m-%d')
-_comps = ['CAM', 'CLM', 'CISM', 'POP2', 'CICE', 'RTM', 'MOSART', 'WW3', 'Driver', 'DATM', 'DLND']
+_comps = ['CAM', 'CLM', 'CISM', 'POP2', 'CICE', 'RTM', 'MOSART', 'WW3', 
+          'Driver', 'DATM', 'DESP', 'DICE', 'DLND', 'DOCN', 'DROF', 'DWAV']
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -133,7 +134,10 @@ def _main_func(options, nmldoc_dir):
                 value_nodes = definition.get_nodes('value', root=node)
                 if value_nodes is not None and len(value_nodes) > 0:
                     for value_node in value_nodes:
-                        value = value_node.text.strip()
+                        try:
+                            value = value_node.text.strip()
+                        except:
+                            value = 'undefined'
                         if value_node.attrib:
                             value = "value is %s for: %s" %(value, value_node.attrib)
                         else:
