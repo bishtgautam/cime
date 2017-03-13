@@ -9,7 +9,7 @@
 # Disable these because this is our standard setup
 # pylint: disable=wildcard-import,unused-wildcard-import,wrong-import-position
 
-import os, sys, re
+import os, sys, re, glob
 import datetime
 
 CIMEROOT = os.environ.get("CIMEROOT")
@@ -34,10 +34,11 @@ _comps = ['CAM', 'CLM', 'CISM', 'POP2', 'CICE', 'RTM', 'MOSART', 'WW3',
           'Driver', 'DATM', 'DESP', 'DICE', 'DLND', 'DOCN', 'DROF', 'DWAV']
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# commandline_options - parse any command line options                       
-# ---------------------------------------------------------------------------
+
+###############################################################################
 def commandline_options():
+###############################################################################
+
     """ Process the command line arguments.                                                                                                                                    
     """
     parser = argparse.ArgumentParser(
@@ -60,18 +61,29 @@ def commandline_options():
 
     return options
 
-# ---------------------------------------------------------------------------
-# def _main_func(options, nmldoc_dir)
-# ---------------------------------------------------------------------------
-    """Construct a `NamelistDefinition` from an XML file."""
+###############################################################################
 def _main_func(options, nmldoc_dir):
+###############################################################################
+
+    """Construct a `NamelistDefinition` from an XML file."""
 
     # Create a definition object from the xml file
     filename = options.nmlfile[0]
     expect(os.path.isfile(filename), "File %s does not exist"%filename)
     definition = GenericXML(infile=filename)
 
-    # initialize a variables for the html template
+    # Determine if have new or old schema
+    basepath = os.path.dirname(filename)
+    default_files = glob.glob(os.path.join(basepath,"namelist_defaults*.xml"))
+    defaults = []
+    if len(default_files) > 0:
+        schema = "old"
+        for default_file in default_files:
+            defaults.append(GenericXML(infile=default_file))
+    else:
+        schema = "new"
+
+    # Initialize a variables for the html template
     html_dict = {}
     cesm_version = 'CESM2.0'
     comp = ''
@@ -81,7 +93,10 @@ def _main_func(options, nmldoc_dir):
     # Create a dictionary with a category key and a list of all entry nodes for each key
     category_dict = {}
     for node in definition.get_nodes("entry"):
-        category = definition.get_element_text("category", root=node)
+        if schema == "new":
+            category = definition.get_element_text("category", root=node)
+        else:
+            category = node.get("category")
         if category in category_dict:
             category_dict[category].append(node)
         else:
@@ -93,15 +108,18 @@ def _main_func(options, nmldoc_dir):
         # Create a dictionary of groups with a group key and an array of group nodes for each key
         groups_dict = {}
         for node in category_dict[category]:
-            group = definition.get_element_text("group", root=node)
+            if schema == "new":
+                group = definition.get_element_text("group", root=node)
+            else:
+                group = node.get("group") 
             if group in groups_dict:
-                groups_dict[group].append(node)
+                groups_dict[group].append(node) 
             else:
                 groups_dict[group] = [ node ]
 
         # Loop over the keys
         for group_name in groups_dict:
-            group_list = list()
+            group_list = []
 
             # Loop over the nodes in each group
             for node in groups_dict[group_name]:
@@ -115,7 +133,11 @@ def _main_func(options, nmldoc_dir):
                     name = re.sub('@.+$', "", name)
 
                 # Create the information for this node - start with the description
-                raw_desc = definition.get_element_text("desc", root=node)
+                if schema == "new":
+                    raw_desc = definition.get_element_text("desc", root=node)
+                else:
+                    raw_desc = node.text 
+
                 if raw_desc is not None: 
                     desc = ' '.join(raw_desc.split())
                     short_desc = desc[:75] + (desc[75:] and '...')
@@ -123,40 +145,68 @@ def _main_func(options, nmldoc_dir):
                     desc = ''
 
                 # add type
-                entry_type = definition.get_element_text("type", root=node)
+                if schema == "new":
+                    entry_type = definition.get_element_text("type", root=node)
+                else:
+                    entry_type = node.get("type")
 
                 # add valid_values
-                valid_values = definition.get_element_text("valid_values", root=node)
+                if schema == "new":
+                    valid_values = definition.get_element_text("valid_values", root=node)
+                else:
+                    valid_values = node.get("valid_values")
+                    
+                if entry_type == "logical":
+                    valid_values = ".true.,.false"
+                else:
+                    if not valid_values:
+                        valid_values = "any " + entry_type
+                        if "char" in valid_values:
+                            valid_values = "any char"
+
                 if valid_values is not None:
                     valid_values = valid_values.split(',')
                     
                 # add default values
-                value_nodes = definition.get_nodes('value', root=node)
-                if value_nodes is not None and len(value_nodes) > 0:
-                    for value_node in value_nodes:
-                        try:
-                            value = value_node.text.strip()
-                        except:
-                            value = 'undefined'
-                        if value_node.attrib:
-                            value = "value is %s for: %s" %(value, value_node.attrib)
-                        else:
-                            value = "default value: %s " %(value)
+                values = ""
+                if schema == "new":
+                    value_nodes = definition.get_nodes('value', root=node)
+                    if value_nodes is not None and len(value_nodes) > 0:
+                        for value_node in value_nodes:
+                            try:
+                                value = value_node.text.strip()
+                            except:
+                                value = 'undefined'
+                            if value_node.attrib:
+                                values += "<br> value is %s for: %s </br>" %(value, value_node.attrib)
+                            else:
+                                values += "<br> value: %s </br>" %(value)
+                else:
+                    for default in defaults:
+                        value_nodes = default.get_nodes(name)
+                        if len(value_nodes) > 0:
+                            for value_node in value_nodes:
+                                if value_node.attrib:
+                                    values += "<br> value is %s for: %s </br>" %(value_node.text, value_node.attrib)
+                                else:
+                                    values += "<br> value: %s </br>" %(value_node.text)
 
+                            
                 # create the node dictionary
                 node_dict = { 'name'        : name,
                               'desc'        : desc,
                               'short_desc'  : short_desc,
                               'entry_type'  : entry_type,
                               'valid_values': valid_values,
-                              'value'       : value,
+                              'value'       : values,
                               'group_name'  : group_name}
 
                 # append this node_dict to the group_list
                 group_list.append(node_dict)
 
-        # update the group_list for this category in the html_dict
-        html_dict[category] = group_list
+            # update the group_list for this category in the html_dict
+            category_group = "category: " + category + " group_name: " + group_name
+            html_dict[category_group] = group_list
 
     # load up jinja template
     templateLoader = jinja2.FileSystemLoader( searchpath='{0}/templates'.format(nmldoc_dir) )
