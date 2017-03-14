@@ -10,7 +10,7 @@
          font-weight:300;
          line-height:1.6em;
          color:#656565;
-         width: 80%;
+         width: 90%;
          align: center;
       }
 
@@ -18,7 +18,7 @@
          padding: 0 30px 0 30px;
          padding-top: 0px;
          padding-right: 30px;
-         padding-bottom: 0px;
+         padding-bottom: 30px;
          padding-left: 30px;
          position: relative;
       }
@@ -32,8 +32,8 @@
       
       .detailsBtn { background-color: #E3E4E6; }
 
-      #variable { color:#66d; font-size: 1.2em; font-weight: bold; display: inline-block; margin-right: 30px; width: 320px; }
-      #emphasis { color:#656565; font-weight: bold; display: inline-block; width: 600px }
+      #variable { color:#66d; font-size: 1.2em; font-weight: bold; display: inline-block; margin-right: 30px; width: 350px; }
+      #emphasis { color:#656565; font-weight: bold; display: inline-block; }
 
     </style>
 
@@ -123,9 +123,9 @@
 	<button class="detailsBtn" onclick="showAll();">Show Details</button>
 	<button class="detailsBtn" onclick="hideAll();">Hide Details</button>
 
-	{% for category, var_list in html_dict.iteritems() %}
+	{% for category, var_list in html_dict|dictsort %}
 	<h2>{{ category|e }}</h2>
-	{% for var in var_list %}
+	{% for var in var_list|sort(attribute='name') %}
 	<div class="accordionItem">
 	  <h2><span id="variable">{{ var['name'] }}</span> <span id="emphasis">{{ var['short_desc']|e }}</span></h2>
 	  <div>

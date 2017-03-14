@@ -70,8 +70,11 @@ def _main_func(options, nmldoc_dir):
     # Create a definition object from the xml file
     filename = options.nmlfile[0]
     expect(os.path.isfile(filename), "File %s does not exist"%filename)
-    definition = GenericXML(infile=filename)
-
+    try:
+        definition = GenericXML(infile=filename)
+    except:
+        sys.exit("Error: unable to parse file %s" %filename)
+        
     # Determine if have new or old schema
     basepath = os.path.dirname(filename)
     default_files = glob.glob(os.path.join(basepath,"namelist_defaults*.xml"))
@@ -84,14 +87,14 @@ def _main_func(options, nmldoc_dir):
         schema = "new"
 
     # Initialize a variables for the html template
-    html_dict = {}
+    html_dict = dict()
     cesm_version = 'CESM2.0'
     comp = ''
     if options.comp:
         comp = options.comp[0]
 
     # Create a dictionary with a category key and a list of all entry nodes for each key
-    category_dict = {}
+    category_dict = dict()
     for node in definition.get_nodes("entry"):
         if schema == "new":
             category = definition.get_element_text("category", root=node)
@@ -106,7 +109,7 @@ def _main_func(options, nmldoc_dir):
     for category in category_dict:
 
         # Create a dictionary of groups with a group key and an array of group nodes for each key
-        groups_dict = {}
+        groups_dict = dict()
         for node in category_dict[category]:
             if schema == "new":
                 group = definition.get_element_text("group", root=node)
@@ -118,8 +121,8 @@ def _main_func(options, nmldoc_dir):
                 groups_dict[group] = [ node ]
 
         # Loop over the keys
+        group_list = list()
         for group_name in groups_dict:
-            group_list = []
 
             # Loop over the nodes in each group
             for node in groups_dict[group_name]:
@@ -178,18 +181,18 @@ def _main_func(options, nmldoc_dir):
                             except:
                                 value = 'undefined'
                             if value_node.attrib:
-                                values += "<br> value is %s for: %s </br>" %(value, value_node.attrib)
+                                values += "value is %s for: %s <br/>" %(value, value_node.attrib)
                             else:
-                                values += "<br> value: %s </br>" %(value)
+                                values += "value: %s <br/>" %(value)
                 else:
                     for default in defaults:
                         value_nodes = default.get_nodes(name)
                         if len(value_nodes) > 0:
                             for value_node in value_nodes:
                                 if value_node.attrib:
-                                    values += "<br> value is %s for: %s </br>" %(value_node.text, value_node.attrib)
+                                    values += "value is %s for: %s <br/>" %(value_node.text, value_node.attrib)
                                 else:
-                                    values += "<br> value: %s </br>" %(value_node.text)
+                                    values += "value: %s <br/>" %(value_node.text)
 
                             
                 # create the node dictionary
@@ -199,13 +202,13 @@ def _main_func(options, nmldoc_dir):
                               'entry_type'  : entry_type,
                               'valid_values': valid_values,
                               'value'       : values,
-                              'group_name'  : group_name}
+                              'group_name'  : group_name }
 
                 # append this node_dict to the group_list
                 group_list.append(node_dict)
 
             # update the group_list for this category in the html_dict
-            category_group = "category: " + category + " group_name: " + group_name
+            category_group = "category: " + category
             html_dict[category_group] = group_list
 
     # load up jinja template
@@ -223,7 +226,6 @@ def _main_func(options, nmldoc_dir):
     # render the template
     nml_tmpl = template.render( templateVars )
 
-    # may need to check if one already exists or not...
     # write the output file
     with open( options.htmlfile[0], 'w') as html:
         html.write(nml_tmpl)
