@@ -34,6 +34,7 @@
 
       #variable { color:#66d; font-size: 1.2em; font-weight: bold; display: inline-block; margin-right: 30px; width: 350px; }
       #emphasis { color:#656565; font-weight: bold; display: inline-block; }
+      #small { color:#9f9f9f; display: inline-block; }
 
     </style>
 
@@ -124,26 +125,39 @@
 	<button class="detailsBtn" onclick="hideAll();">Hide Details</button>
 
 	{% for category, var_list in html_dict|dictsort %}
-	<h2>{{ category|e }}</h2>
+	<h2>Category: {{ category|e }}</h2>
 	{% for var in var_list|sort(attribute='name') %}
 	<div class="accordionItem">
-	  <h2><span id="variable">{{ var['name'] }}</span> <span id="emphasis">{{ var['short_desc']|e }}</span></h2>
+	  <h2><span id="variable">{{ var['name'] }}</span> <span id="emphasis">{{ var['short_desc']|e }}</span>
+	      {% if var['group_name']|length > 1 %}
+	      <br/><span id="small">Group: {{ var['group_name'] }}
+              </span>{% endif %}</h2>
 	  <div>
 	    <dl>
+	      {% if var['desc']|length > 1 %}
 	      <dt>Description</dt>
 	      <dd>{{ var['desc'] }}</dd>
-	    
+	      {% endif %}
+
+	      {% if var['entry_type']|length > 1 %}	    
 	      <dt>Type</dt>
 	      <dd>{{ var['entry_type'] }}</dd>
+	      {% endif %}
 	    
+	      {% if var['valid_values']|length > 1 %}	    
 	      <dt>Valid Values</dt>
 	      <dd>{{ var['valid_values']|e }}</dd>
+	      {% endif %}
 	    
+	      {% if var['value']|length > 1 %}	    
 	      <dt>Default Value</dt>
 	      <dd>{{ var['value'] }}</dd>
+	      {% endif %}
 
+	      {% if var['group_name']|length > 1 %}	    
 	      <dt>XML Group Name</dt>
 	      <dd>{{ var['group_name'] }}</dd>
+	      {% endif %}
 
 	    </dl>
 	  </div>

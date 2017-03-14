@@ -194,7 +194,6 @@ def _main_func(options, nmldoc_dir):
                                 else:
                                     values += "value: %s <br/>" %(value_node.text)
 
-                            
                 # create the node dictionary
                 node_dict = { 'name'        : name,
                               'desc'        : desc,
@@ -208,7 +207,7 @@ def _main_func(options, nmldoc_dir):
                 group_list.append(node_dict)
 
             # update the group_list for this category in the html_dict
-            category_group = "category: " + category
+            category_group = category
             html_dict[category_group] = group_list
 
     # load up jinja template
