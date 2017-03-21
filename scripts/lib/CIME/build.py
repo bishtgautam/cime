@@ -699,9 +699,9 @@ def _case_build_impl(caseroot, case, sharedlib_only, model_only):
     # Load modules
     case.load_env()
 
-    sharedpath = _build_checks(case, build_threaded, comp_interface,
-                               use_esmf_lib, debug, compiler, mpilib,
-                               complist, ninst_build, smp_value, model_only)
+    sharedpath = build_checks(case, build_threaded, comp_interface,
+                              use_esmf_lib, debug, compiler, mpilib,
+                              complist, ninst_build, smp_value, model_only)
 
     t2 = time.time()
     logs = []
