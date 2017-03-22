@@ -123,6 +123,8 @@ class _TimingParser:
         atm_ncpl = self.case.get_value("ATM_NCPL")
         ocn_ncpl = self.case.get_value("OCN_NCPL")
         compset = self.case.get_value("COMPSET")
+        if compset is None:
+            compset = ""
         grid = self.case.get_value("GRID")
         run_type = self.case.get_value("RUN_TYPE")
         stop_option = self.case.get_value("STOP_OPTION")
