@@ -761,9 +761,9 @@ class TestScheduler(object):
                 os.chmod(cs_submit_file,
                          os.stat(cs_submit_file).st_mode | stat.S_IXUSR | stat.S_IXGRP)
 
-            if CIME.utils.get_model == "cesm":
-                testreporter =  os.path.join(self._test_root,"testreporter.pl")
-                shutil.copy(os.path.join(self._cime_root,"scripts","Testing","testreporter.pl"),
+            if CIME.utils.get_model() == "cesm":
+                testreporter =  os.path.join(self._test_root,"testreporter.py")
+                shutil.copy(os.path.join(self._cime_root,"scripts","Tools","testreporter.py"),
                             testreporter)
                 os.chmod(testreporter, os.stat(testreporter).st_mode | stat.S_IXUSR | stat.S_IXGRP)
 
