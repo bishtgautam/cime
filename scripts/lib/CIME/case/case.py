@@ -598,8 +598,8 @@ class Case(object):
         # because we ignore CPL for finding model components.
         # Model components would normally start at zero but since we are
         # dealing with a compset, 0 is reserved for the time field
-        drv_config_file = files.get_value("CONFIG_CPL_FILE")
-        drv_comp = Component(drv_config_file, "CPL")
+        drv_config_file_model_specific = files.get_value("CONFIG_CPL_FILE_MODEL_SPECIFIC")
+        drv_comp = Component(drv_config_file_model_specific, "CPL")
         comp_classes = drv_comp.get_valid_model_components()
         comp_hash = {} # Hash model name to component class index
         for comp_ind in range(1, len(comp_classes)):
@@ -724,7 +724,7 @@ class Case(object):
 
         # loop over all elements of both component_classes and components - and get config_component_file for
         # for each component
-        self.set_comp_classes(drv_comp.get_valid_model_components())
+        self.set_comp_classes(drv_comp_model_specific.get_valid_model_components())
 
         # will need a change here for new cpl components
         root_dir_node_name = 'COMP_ROOT_DIR_CPL'
