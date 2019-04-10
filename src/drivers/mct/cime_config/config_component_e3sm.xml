@@ -2,6 +2,14 @@
 
 <entry_id version="2.0">
 
+  <entry id="COMP_CLASSES">
+    <type>char</type>
+    <default_value>CPL,ATM,LND,ICE,OCN,ROF,GLC,WAV,IAC,ESP</default_value>
+    <file>env_case.xml</file>
+    <group>case_comp</group>
+    <desc>List of component classes supported by this driver</desc>
+  </entry>
+
   <entry id="MODEL_DOI_URL">
     <type>char</type>
     <default_value>https://doi.org/10.11578/E3SM/dc.20180418.36</default_value>
