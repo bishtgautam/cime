@@ -318,12 +318,16 @@ def xml_to_make_variable(case, varname, cmake=False):
 def uses_kokkos(case):
     ###############################################################################
     cam_target = case.get_value("CAM_TARGET")
+    lnd_comp = case.get_value("COMP_LND")
     # atm_comp   = case.get_value("COMP_ATM") # scream does not use the shared kokkoslib for now
 
-    return config.use_kokkos and cam_target in (
-        "preqx_kokkos",
-        "theta-l",
-        "theta-l_kokkos",
+    return config.use_kokkos and (
+        lnd_comp == "elmxx"
+        or cam_target in (
+            "preqx_kokkos",
+            "theta-l",
+            "theta-l_kokkos",
+        )
     )
 
 
